@@ -11,6 +11,9 @@ function newPuzzle(n, image_src) {
   var random_positions = solution.sort(function(){
     return 0.5 - Math.random();
   });
+  random_positions = random_positions.sort(function(){
+    return 0.5 - Math.random();
+  });
 
   console.log("positions: "+random_positions);
 
@@ -84,7 +87,6 @@ function newPuzzle(n, image_src) {
 }
 
 jQuery(document).ready(function($) {
-
   var client_id = 'f0d3cc511b8a4f31868cab5c7f7b8f0d';
   var url = "https://api.instagram.com/v1/media/popular?client_id=" + client_id;
   var image_src = null;
