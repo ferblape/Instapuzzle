@@ -5,17 +5,19 @@ function newPuzzle(n, image_src) {
   var blank_position = number_of_pieces - 1; // the last element is always the blank
   var slice = instagram_image_size / n;
   var solution = new Array();
+  var random_positions = new Array();
   for(var i=0;i<number_of_pieces;i++) {
-    solution[i]=i;
+    solution[i] = i;
+    random_positions[i] = i;
   }
-  var random_positions = solution.sort(function(){
-    return 0.5 - Math.random();
-  });
   random_positions = random_positions.sort(function(){
+    return 0.5 - Math.random();
+  }).sort(function(){
     return 0.5 - Math.random();
   });
 
   console.log("positions: "+random_positions);
+  console.log("sol: "+solution);
 
   var images = new Array();
   for(var i = 0; i < n; i++) {
@@ -34,11 +36,11 @@ function newPuzzle(n, image_src) {
 
   return {
     number_of_pieces: number_of_pieces,
-    height: instagram_image_size,
-    width: instagram_image_size,
+    solution: solution,
     positions: random_positions,
     blank_position: blank_position,
     images: images,
+    image_src: image_src,
     build: function(){
       for(var i = 0; i < n; i++) {
         for(var j = 0; j < n; j++) {
@@ -56,6 +58,14 @@ function newPuzzle(n, image_src) {
         }
       }
     },
+    solved: function(){
+      for(var i = 0; i < n*n; i++) {
+        if(this.positions[i] != this.solution[i]) {
+          return false;
+        }
+      }
+      return true;
+    },
     swap: function(from,to){
       if (from != this.blank_position && to != this.blank_position)
         return;
@@ -68,8 +78,6 @@ function newPuzzle(n, image_src) {
         var bigger = to;
         var smaller = from;
       }
-      console.log(from + " - " +  to + " bigger: " + bigger + " - smaller: " + smaller);
-      console.log(bigger-smaller);
       if ((bigger - smaller) != 1 && (bigger - smaller) != n)
         return;
 
@@ -78,10 +86,18 @@ function newPuzzle(n, image_src) {
       this.positions[to] = swap;
 
       console.log("positions: " + this.positions);
+      console.log("positions: "+ this.solution);
       this.blank_position = (this.blank_position == from ? to : from);
 
       $('.piece:eq('+from+')').html(this.images[this.positions[from]].html_node);
       $('.piece:eq('+to+')').html(this.images[this.positions[to]].html_node);
+
+      if (this.solved()){
+        alert("Solved!!");
+        $('.piece:eq('+this.blank_position+') img').attr('src', this.image_src);
+      } else {
+        console.log("Not solved yet");
+      }
     }
   }
 }
