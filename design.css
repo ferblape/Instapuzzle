@@ -1,0 +1,36 @@
+html {
+  background: #443c34;
+  font: 1em/1.5em "comic-serif-pro", Arial, sans-serif;
+}
+
+body {
+  background: #443c34;
+  margin: 40px auto;
+  width: 612px;
+}
+
+img {
+  vertical-align: middle;
+}
+
+h1 {
+  color: #fff;
+  font-size: 80px;
+  text-align: center;
+  text-shadow: 0.04em .07em 0 #000;
+}
+
+.time,
+.moves {
+  color: #d0b89f;
+  display: inline-block;
+  font-size: 36px;
+  margin: 0 0 .5em .5em;
+  text-shadow: 0.03em .06em 0 #000; 
+}
+
+#puzzle {
+  height: 612px;
+  position: relative;
+  width: 612px;
+}
