@@ -41,6 +41,7 @@ function newPuzzle(n, image_src) {
     blank_position: blank_position,
     images: images,
     image_src: image_src,
+    moves: 0,
     build: function(){
       for(var i = 0; i < n; i++) {
         for(var j = 0; j < n; j++) {
@@ -91,6 +92,9 @@ function newPuzzle(n, image_src) {
 
       $('.piece:eq('+from+')').html(this.images[this.positions[from]].html_node);
       $('.piece:eq('+to+')').html(this.images[this.positions[to]].html_node);
+
+      this.moves ++;
+      $('.moves').html((this.moves == 1) ? "1 move" : this.moves + " moves");
 
       if (this.solved()){
         alert("Solved!!");
