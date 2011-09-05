@@ -25,7 +25,6 @@ function newPuzzle(n, image_src) {
   var instagram_image_size = 612;
   var number_of_pieces = n*n;
   var blank_image_src = "black.png";
-  var blank_position = number_of_pieces - 1; // the last element is always the blank
   var slice = instagram_image_size / n;
   var solution = new Array();
   var random_positions = new Array();
@@ -38,6 +37,8 @@ function newPuzzle(n, image_src) {
   }).sort(function(){
     return 0.5 - Math.random();
   });
+
+  var blank_position = random_positions[number_of_pieces - 1]; // the last element is always the blank hole
 
   console.log("positions: "+random_positions);
   console.log("sol: "+solution);
@@ -93,10 +94,11 @@ function newPuzzle(n, image_src) {
       return true;
     },
     swap: function(from,to){
-      if (from != this.blank_position && to != this.blank_position)
-        return;
       from = parseInt(from);
       to   = parseInt(to);
+      if (from != this.blank_position && to != this.blank_position)
+        return;
+
       if(from > to){
         var bigger = from;
         var smaller = to;
