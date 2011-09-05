@@ -93,10 +93,10 @@ function newPuzzle(n, image_src) {
       }
       return true;
     },
-    swap: function(from,to){
+    move: function(from,to){
       from = parseInt(from);
       to   = parseInt(to);
-      if (from != this.blank_position && to != this.blank_position)
+      if ((from != this.blank_position && to != this.blank_position) || (from == to))
         return;
 
       if(from > to){
@@ -135,20 +135,15 @@ function newPuzzle(n, image_src) {
 
 jQuery(document).ready(function($) {
   var client_id = 'f0d3cc511b8a4f31868cab5c7f7b8f0d';
-  var url = "https://api.instagram.com/v1/media/popular?client_id=" + client_id;
-  var image_src = null;
   $.ajax({
-    url: url,
+    url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
     dataType: 'jsonp',
     success: function(data){
-      image_src = data['data'][0]['images']['standard_resolution']['url'];
+      var image_src = data['data'][0]['images']['standard_resolution']['url'];
       var puzzle = newPuzzle(3, image_src);
       puzzle.build();
       $('.piece').click(function(){
-        var position = $(this).attr('id').match(/[0-9]+/)[0];
-        if(position == puzzle.blank_position)
-          return;
-        puzzle.swap(position, puzzle.blank_position);
+        puzzle.move($(this).attr('id').match(/[0-9]+/)[0], puzzle.blank_position);
       });
     }
   });
