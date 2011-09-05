@@ -1,3 +1,26 @@
+function newTimer(selector){
+  return {
+    seconds: 0,
+    minutes: 0,
+    selector: selector,
+    printTime: function(){
+      $(selector).html((this.minutes < 10 ? "0" + this.minutes : this.minutes ) + ':' + (this.seconds < 10 ? "0" + this.seconds : this.seconds));
+    },
+    increaseTime: function(){
+      if(this.seconds < 59 ){
+        this.seconds ++;
+      } else {
+        this.seconds = 0
+        this.minutes ++;
+      }
+      this.printTime();
+    },
+    start: function(){
+      setInterval(function(o){o.increaseTime();}, 1000, this);
+    }
+  }
+}
+
 function newPuzzle(n, image_src) {
   var instagram_image_size = 612;
   var number_of_pieces = n*n;
@@ -41,6 +64,7 @@ function newPuzzle(n, image_src) {
     blank_position: blank_position,
     images: images,
     image_src: image_src,
+    timer: newTimer('.time'),
     moves: 0,
     build: function(){
       for(var i = 0; i < n; i++) {
@@ -58,6 +82,7 @@ function newPuzzle(n, image_src) {
           $('#puzzle').append(piece);
         }
       }
+      this.timer.start();
     },
     solved: function(){
       for(var i = 0; i < n*n; i++) {
