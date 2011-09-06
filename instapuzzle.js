@@ -68,22 +68,33 @@ function newPuzzle(n, image_src) {
     timer: newTimer('.time'),
     moves: 0,
     build: function(){
-      for(var i = 0; i < n; i++) {
-        for(var j = 0; j < n; j++) {
-          var piece = $('<div class="piece" id="piece-'+(i*n+j)+'"></div>').
-                      css("position", "absolute").css("top", i*slice).
-                      css("left", j*slice).css("overflow", "hidden").
-                      css("height", slice).css("width", slice);
-          if(i*n+j != blank_position) {
-            piece.append(images[random_positions[i*n+j]].html_node);
-          } else {
-            images[random_positions[i*n+j]].html_node.attr('src', blank_image_src);
-            piece.append(images[random_positions[i*n+j]].html_node);
+      var div = $('<div>');
+      var image = $('<img />').attr('src', image_src);
+      var puzzle = this;
+      image.fadeIn(2000, function(){
+        $('#puzzle').html('');
+        for(var i = 0; i < n; i++) {
+          for(var j = 0; j < n; j++) {
+            var piece = $('<div class="piece" id="piece-'+(i*n+j)+'"></div>').
+                        css("position", "absolute").css("top", i*slice).
+                        css("left", j*slice).css("overflow", "hidden").
+                        css("height", slice).css("width", slice);
+            if(i*n+j != blank_position) {
+              piece.append(images[random_positions[i*n+j]].html_node);
+            } else {
+              images[random_positions[i*n+j]].html_node.attr('src', blank_image_src);
+              piece.append(images[random_positions[i*n+j]].html_node);
+            }
+            piece.click(function(){
+              puzzle.move($(this).attr('id').match(/[0-9]+/)[0], puzzle.blank_position);
+            });
+            $('#puzzle').append(piece);
           }
-          $('#puzzle').append(piece);
         }
-      }
-      this.timer.start();
+        puzzle.timer.start();
+      });
+      div.append(image);
+      $('#puzzle').append(div);
     },
     solved: function(){
       for(var i = 0; i < n*n; i++) {
@@ -142,9 +153,6 @@ jQuery(document).ready(function($) {
       var image_src = data['data'][0]['images']['standard_resolution']['url'];
       var puzzle = newPuzzle(3, image_src);
       puzzle.build();
-      $('.piece').click(function(){
-        puzzle.move($(this).attr('id').match(/[0-9]+/)[0], puzzle.blank_position);
-      });
     }
   });
 });
