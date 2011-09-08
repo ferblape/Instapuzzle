@@ -24,7 +24,6 @@ function newTimer(selector){
 function newPuzzle(n, image_src) {
   var instagram_image_size = 612;
   var number_of_pieces = n*n;
-  var blank_image_src = "black.png";
   var slice = instagram_image_size / n;
   var solution = new Array();
   var random_positions = new Array();
@@ -39,9 +38,6 @@ function newPuzzle(n, image_src) {
   });
 
   var blank_position = random_positions[number_of_pieces - 1]; // the last element is always the blank hole
-
-  console.log("positions: "+random_positions);
-  console.log("sol: "+solution);
 
   var images = new Array();
   for(var i = 0; i < n; i++) {
@@ -78,11 +74,9 @@ function newPuzzle(n, image_src) {
             var piece = $('<div class="piece" id="piece-'+(i*n+j)+'"></div>').
                         css("position", "absolute").css("top", i*slice).
                         css("left", j*slice).css("overflow", "hidden").
-                        css("height", slice).css("width", slice);
+                        css("height", slice).css("width", slice).
+                        css("background-color", '#000');
             if(i*n+j != blank_position) {
-              piece.append(images[random_positions[i*n+j]].html_node);
-            } else {
-              images[random_positions[i*n+j]].html_node.attr('src', blank_image_src);
               piece.append(images[random_positions[i*n+j]].html_node);
             }
             piece.click(function(){
@@ -124,11 +118,9 @@ function newPuzzle(n, image_src) {
       this.positions[from] = this.positions[to];
       this.positions[to] = swap;
 
-      console.log("positions: " + this.positions);
-      console.log("positions: "+ this.solution);
       this.blank_position = (this.blank_position == from ? to : from);
 
-      $('.piece:eq('+from+')').html(this.images[this.positions[from]].html_node);
+      $('.piece:eq('+from+')').html('');
       $('.piece:eq('+to+')').html(this.images[this.positions[to]].html_node);
 
       this.moves ++;
@@ -150,8 +142,7 @@ jQuery(document).ready(function($) {
     url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
     dataType: 'jsonp',
     success: function(data){
-      var image_src = data['data'][0]['images']['standard_resolution']['url'];
-      var puzzle = newPuzzle(3, image_src);
+      var puzzle = newPuzzle(3, data['data'][0]['images']['standard_resolution']['url']);
       puzzle.build();
     }
   });
