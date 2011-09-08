@@ -4,7 +4,7 @@ function newTimer(selector){
     minutes: 0,
     selector: selector,
     printTime: function(){
-      $(selector).html((this.minutes < 10 ? "0" + this.minutes : this.minutes ) + ':' + (this.seconds < 10 ? "0" + this.seconds : this.seconds));
+      jQuery(selector).html((this.minutes < 10 ? "0" + this.minutes : this.minutes ) + ':' + (this.seconds < 10 ? "0" + this.seconds : this.seconds));
     },
     increaseTime: function(){
       if(this.seconds < 59 ){
@@ -43,7 +43,7 @@ function newPuzzle(n, image_src) {
   for(var i = 0; i < n; i++) {
     for(var j = 0; j < n; j++) {
       var index = i*n+j;
-      var node = $('<img />').attr('src', image_src).attr('height', instagram_image_size).
+      var node = jQuery('<img />').attr('src', image_src).attr('height', instagram_image_size).
           attr('width', instagram_image_size).
           css("position", "relative").css("top", -1*i*slice).
           css("left", -1*j*slice);
@@ -64,14 +64,14 @@ function newPuzzle(n, image_src) {
     timer: newTimer('.time'),
     moves: 0,
     build: function(){
-      var div = $('<div>');
-      var image = $('<img />').attr('src', image_src);
+      var div = jQuery('<div>');
+      var image = jQuery('<img />').attr('src', image_src);
       var puzzle = this;
-      image.fadeIn(2000, function(){
-        $('#puzzle').html('');
+      image.fadeIn(2500, function(){
+        jQuery('#puzzle').html('');
         for(var i = 0; i < n; i++) {
           for(var j = 0; j < n; j++) {
-            var piece = $('<div class="piece" id="piece-'+(i*n+j)+'"></div>').
+            var piece = jQuery('<div class="piece" id="piece-'+(i*n+j)+'"></div>').
                         css("position", "absolute").css("top", i*slice).
                         css("left", j*slice).css("overflow", "hidden").
                         css("height", slice).css("width", slice).
@@ -79,16 +79,20 @@ function newPuzzle(n, image_src) {
             if(i*n+j != blank_position) {
               piece.append(images[random_positions[i*n+j]].html_node);
             }
-            piece.click(function(){
-              puzzle.move($(this).attr('id').match(/[0-9]+/)[0], puzzle.blank_position);
+            piece.select(function(){
+              console.log("selected");
+              return false;
             });
-            $('#puzzle').append(piece);
+            piece.click(function(){
+              puzzle.move(jQuery(this).attr('id').match(/[0-9]+/)[0], puzzle.blank_position);
+            });
+            jQuery('#puzzle').append(piece);
           }
         }
         puzzle.timer.start();
       });
       div.append(image);
-      $('#puzzle').append(div);
+      jQuery('#puzzle').append(div);
     },
     solved: function(){
       for(var i = 0; i < n*n; i++) {
@@ -120,17 +124,15 @@ function newPuzzle(n, image_src) {
 
       this.blank_position = (this.blank_position == from ? to : from);
 
-      $('.piece:eq('+from+')').html('');
-      $('.piece:eq('+to+')').html(this.images[this.positions[to]].html_node);
+      jQuery('.piece:eq('+from+')').html('');
+      jQuery('.piece:eq('+to+')').html(this.images[this.positions[to]].html_node);
 
       this.moves ++;
-      $('.moves').html((this.moves == 1) ? "1 move" : this.moves + " moves");
+      jQuery('.moves').html((this.moves == 1) ? "1 move" : this.moves + " moves");
 
       if (this.solved()){
         alert("Solved!!");
-        $('.piece:eq('+this.blank_position+') img').attr('src', this.image_src);
-      } else {
-        console.log("Not solved yet");
+        jQuery('.piece:eq('+this.blank_position+')').html(this.images[this.blank_position].html_node);
       }
     }
   }
