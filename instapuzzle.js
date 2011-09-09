@@ -3,6 +3,7 @@ function newTimer(selector){
     seconds: 0,
     minutes: 0,
     selector: selector,
+    interval: null,
     printTime: function(){
       jQuery(selector).html((this.minutes < 10 ? "0" + this.minutes : this.minutes ) + ':' + (this.seconds < 10 ? "0" + this.seconds : this.seconds));
     },
@@ -16,7 +17,10 @@ function newTimer(selector){
       this.printTime();
     },
     start: function(){
-      setInterval(function(o){o.increaseTime();}, 1000, this);
+      this.interval = setInterval(function(o){o.increaseTime();}, 1000, this);
+    },
+    stop: function(){
+      this.interval = clearInterval(this.interval);
     }
   }
 }
@@ -98,14 +102,8 @@ function newPuzzle(n, image_src) {
       if ((from != this.blank_position && to != this.blank_position) || (from == to))
         return;
 
-      if(from > to){
-        var bigger = from;
-        var smaller = to;
-      } else {
-        var bigger = to;
-        var smaller = from;
-      }
-      if ((bigger - smaller) != 1 && (bigger - smaller) != n)
+      var diff = (from - to < 0 ? to - from : from - to);
+      if (diff != 1 && diff != n)
         return;
 
       var swap = this.positions[from];
@@ -122,6 +120,7 @@ function newPuzzle(n, image_src) {
       if (this.solved()){
         alert("Solved!!");
         jQuery('.piece:eq('+this.blank_position+')').html(this.images[this.blank_position].html_node);
+        this.timer.stop();
       }
     }
   }
