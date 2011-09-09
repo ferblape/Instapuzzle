@@ -55,12 +55,10 @@ function newPuzzle(n, image_src) {
   }
 
   return {
-    number_of_pieces: number_of_pieces,
     solution: solution,
     positions: random_positions,
     blank_position: blank_position,
     images: images,
-    image_src: image_src,
     timer: newTimer('.time'),
     moves: 0,
     build: function(){
@@ -71,18 +69,10 @@ function newPuzzle(n, image_src) {
         jQuery('#puzzle').html('');
         for(var i = 0; i < n; i++) {
           for(var j = 0; j < n; j++) {
-            var piece = jQuery('<div class="piece" id="piece-'+(i*n+j)+'"></div>').
-                        css("position", "absolute").css("top", i*slice).
-                        css("left", j*slice).css("overflow", "hidden").
-                        css("height", slice).css("width", slice).
-                        css("background-color", '#000');
+            var piece = jQuery('<div class="piece" id="piece-'+(i*n+j)+'"></div>').css("top", i*slice).css("left", j*slice).css("height", slice).css("width", slice);
             if(i*n+j != blank_position) {
               piece.append(images[random_positions[i*n+j]].html_node);
             }
-            piece.select(function(){
-              console.log("selected");
-              return false;
-            });
             piece.click(function(){
               puzzle.move(jQuery(this).attr('id').match(/[0-9]+/)[0], puzzle.blank_position);
             });
@@ -121,7 +111,6 @@ function newPuzzle(n, image_src) {
       var swap = this.positions[from];
       this.positions[from] = this.positions[to];
       this.positions[to] = swap;
-
       this.blank_position = (this.blank_position == from ? to : from);
 
       jQuery('.piece:eq('+from+')').html('');
@@ -144,7 +133,7 @@ jQuery(document).ready(function($) {
     url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
     dataType: 'jsonp',
     success: function(data){
-      var puzzle = newPuzzle(3, data['data'][0]['images']['standard_resolution']['url']);
+      var puzzle = newPuzzle(5, data['data'][0]['images']['standard_resolution']['url']);
       puzzle.build();
     }
   });

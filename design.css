@@ -26,11 +26,17 @@ h1 {
   display: inline-block;
   font-size: 36px;
   margin: 0 0 .5em .5em;
-  text-shadow: 0.03em .06em 0 #000; 
+  text-shadow: 0.03em .06em 0 #000;
 }
 
 #puzzle {
   height: 612px;
   position: relative;
   width: 612px;
+}
+
+.piece {
+  overflow: hidden;
+  position: absolute;
+  background-color: #000;
 }
