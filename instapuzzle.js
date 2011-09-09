@@ -63,6 +63,7 @@ function newPuzzle(n, image_src) {
     positions: random_positions,
     blank_position: blank_position,
     images: images,
+    n: n,
     timer: newTimer('.time'),
     moves: 0,
     build: function(){
@@ -99,7 +100,7 @@ function newPuzzle(n, image_src) {
     move: function(from,to){
       from = parseInt(from);
       to   = parseInt(to);
-      if ((from != this.blank_position && to != this.blank_position) || (from == to))
+      if ((from != this.blank_position && to != this.blank_position) || (from == to) || (from < to && ((from+1)%this.n==0) && ((to+1)%this.n==!0)))
         return;
 
       var diff = (from - to < 0 ? to - from : from - to);
