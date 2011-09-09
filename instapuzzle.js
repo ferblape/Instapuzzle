@@ -1,4 +1,4 @@
-function newTimer(selector){
+function Timer(selector){
   return {
     seconds: 0,
     minutes: 0,
@@ -25,15 +25,15 @@ function newTimer(selector){
   }
 }
 
-function newPuzzle(n, image_src) {
+function Puzzle(n, image_src) {
   var instagram_image_size = 612;
   var number_of_pieces = n*n;
   var slice = instagram_image_size / n;
   var solution = new Array();
   var random_positions = new Array();
   for(var i=0;i<number_of_pieces;i++) {
-    solution[i] = i;
-    random_positions[i] = i;
+    solution.push(i);
+    random_positions.push(i);
   }
   random_positions = random_positions.sort(function(){
     return 0.5 - Math.random();
@@ -51,10 +51,7 @@ function newPuzzle(n, image_src) {
           attr('width', instagram_image_size).
           css("position", "relative").css("top", -1*i*slice).
           css("left", -1*j*slice);
-      images[index] = {
-        id: index,
-        html_node: node
-      };
+      images.push(node);
     }
   }
 
@@ -64,7 +61,7 @@ function newPuzzle(n, image_src) {
     blank_position: blank_position,
     images: images,
     n: n,
-    timer: newTimer('.time'),
+    timer: new Timer('.time'),
     moves: 0,
     build: function(){
       var div = jQuery('<div>');
@@ -76,7 +73,7 @@ function newPuzzle(n, image_src) {
           for(var j = 0; j < n; j++) {
             var piece = jQuery('<div class="piece" id="piece-'+(i*n+j)+'"></div>').css("top", i*slice).css("left", j*slice).css("height", slice).css("width", slice);
             if(i*n+j != blank_position) {
-              piece.append(images[random_positions[i*n+j]].html_node);
+              piece.append(images[random_positions[i*n+j]]);
             }
             piece.click(function(){
               puzzle.move(jQuery(this).attr('id').match(/[0-9]+/)[0], puzzle.blank_position);
@@ -113,14 +110,14 @@ function newPuzzle(n, image_src) {
       this.blank_position = (this.blank_position == from ? to : from);
 
       jQuery('.piece:eq('+from+')').html('');
-      jQuery('.piece:eq('+to+')').html(this.images[this.positions[to]].html_node);
+      jQuery('.piece:eq('+to+')').html(this.images[this.positions[to]]);
 
       this.moves ++;
       jQuery('.moves').html((this.moves == 1) ? "1 move" : this.moves + " moves");
 
       if (this.solved()){
         alert("Solved!!");
-        jQuery('.piece:eq('+this.blank_position+')').html(this.images[this.blank_position].html_node);
+        jQuery('.piece:eq('+this.blank_position+')').html(this.images[this.blank_position]);
         this.timer.stop();
       }
     }
@@ -133,7 +130,7 @@ jQuery(document).ready(function($) {
     url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
     dataType: 'jsonp',
     success: function(data){
-      var puzzle = newPuzzle(3, data['data'][0]['images']['standard_resolution']['url']);
+      var puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
       puzzle.build();
     }
   });
