@@ -133,7 +133,7 @@ jQuery(document).ready(function($) {
     url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
     dataType: 'jsonp',
     success: function(data){
-      var puzzle = newPuzzle(5, data['data'][0]['images']['standard_resolution']['url']);
+      var puzzle = newPuzzle(3, data['data'][0]['images']['standard_resolution']['url']);
       puzzle.build();
     }
   });
