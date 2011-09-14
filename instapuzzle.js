@@ -2,7 +2,6 @@ function Timer(selector){
   return {
     seconds: 0,
     minutes: 0,
-    selector: selector,
     interval: null,
     printTime: function(){
       jQuery(selector).html((this.minutes < 10 ? "0" + this.minutes : this.minutes ) + ':' + (this.seconds < 10 ? "0" + this.seconds : this.seconds));
@@ -97,7 +96,10 @@ function Puzzle(n, image_src) {
     move: function(from,to){
       from = parseInt(from);
       to   = parseInt(to);
-      if ((from != this.blank_position && to != this.blank_position) || (from == to) || (from < to && ((from+1)%this.n==0) && ((to+1)%this.n==!0)))
+      if ((from != this.blank_position && to != this.blank_position) ||
+          (from == to) ||
+          (from < to && ((from+1)%this.n==0) && ((to+1)%this.n!=0)) ||
+          (from > to && ((to+1)%this.n==0) && ((from+1)%this.n!=0)))
         return;
 
       var diff = (from - to < 0 ? to - from : from - to);
