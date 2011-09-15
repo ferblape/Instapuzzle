@@ -14,73 +14,163 @@
 /* End */
 
 html {
-  background: #122438;
-  font: 1em/1.5em 'HVDComicSerifProRegular', Arial, sans-serif;
+  background: #42525B;
+  font: 100%/150% 'HVDComicSerifProRegular', Arial, sans-serif;
 }
 
 body {
-  background: #122438;
-  margin: 40px auto;
-  padding: 0 30px;
-  width: 672px;
+  background: #42525B;
+  color: #fff;
+  padding: 2em 1em;
 }
 
 img {
   vertical-align: middle;
 }
 
-h1 {
-  background: #af0a18;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  -moz-box-shadow: 4px 4px 1px #000;
-  -webkit-box-shadow: 4px 4px 1px #000;
-  box-shadow: 4px 4px 1px #000;
-  color: #fff;
-  font-size: 80px;
-  margin: 0 30px;
-  padding: .8em 0;
-  text-align: center;
-  text-shadow: 0.04em .07em 0 #191313;
+a:link,
+a:visited {
+  color: #ffc;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #b2b27d;
 }
 
 #game {
-  background: #191313;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  padding: 30px;
+  background: #142524;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  border-radius: 1em;
+  -moz-box-shadow: 0.1em .1em 0 #000;
+  -webkit-box-shadow: 0.1em .1em 0 #000;
+  box-shadow: .3em .3em 0 #353E3E;
+  margin: 2.5em auto 0 auto;
+  padding: 2em;
+  width: 38.25em;
+}
+
+h1 {
+  background: #92140C;
+  -webkit-border-radius: .1em;
+  -moz-border-radius: .1em;
+  border-radius: .1em;
+  -moz-box-shadow: 0.1em .1em 0 #000;
+  -webkit-box-shadow: 0.1em .1em 0 #000;
+  box-shadow: .1em .1em 0 #000;
+  color: #fff;
+  display: block;
+  font-size: 3em;
+  margin: -1.8em auto 0 auto;
+  padding: .75em;
+  text-align: center;
+  text-shadow: .04em .07em 0 #191313;
+  -moz-transform: rotate(-1deg) skew(-5deg);
+  -webkit-transform: rotate(-1deg) skew(-5deg);
+  width: 8em;
 }
 
 #controls {
-  background: #28394b;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  margin: 0 0 30px 0;
-  padding: 10px;
+  background: #41525b;
+  -webkit-border-radius: .75em;
+  -moz-border-radius: .75em;
+  border-radius: .75em;
+  color: #fff;
+  line-height: 1em;
+  margin: 1.5em 0;
+  padding: 1em;
   position: relative;
+  -moz-transform: skew(1deg);
+  -webkit-transform: skew(2deg);
 }
 
-.time,
-.moves {
-  color: #fff;
+h2,
+.time {
   display: inline-block;
-  font-size: 36px;
-  margin: 0 0 .5em .5em;
-  text-shadow: 3px 5px 1px #000;
+  font-size: 2em;
+  left: 1.25em;
+  line-height: 1.5em;
+  margin: 0;
+  position: relative;
+  text-shadow: .1em .15em 0 #000;
+}
+
+h2 {
+  left: .5em;
+}
+
+.moves {
+  display: inline-block;
+  font-size: 2em;
+  left: 5em;
+  line-height: 1.5em;
+  position: absolute;
+  text-shadow: .1em .15em 0 #000;
 }
 
 .moves span {
-  font-size: 21px;
-  margin: 0 0 0 -.25em;
+  display: inline-block;
+  font-size: .75em;
 }
 
 #puzzle {
   height: 612px;
   position: relative;
   width: 612px;
+}
+
+#level {
+  background: #41525b;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  border-radius: 1em;
+  min-height: 34.25em;
+  padding: 2em;
+  position: relative;
+  text-align: center;
+}
+
+.level {
+  background: #666;
+  -webkit-border-radius: .4em;
+  -moz-border-radius: .4em;
+  border-radius: .4em;
+  -moz-box-shadow: 0.1em .1em 0 #000;
+  -webkit-box-shadow: 0.1em .1em 0 #000;
+  box-shadow: .1em .1em 0 #000;
+  color: #fff;
+  display: block;
+  font-size: 2em;
+  margin: 0 0 1em 0;
+  padding: .75em;
+  text-shadow: .04em .07em 0 #191313;
+  width: 15.5em;
+}
+
+.level span {
+ font-size: .6em;
+}
+
+.level.active {
+  background: #bcb71e;
+}
+
+.level:hover {
+  color: #fff;
+}
+
+#credits {
+  bottom: 2em;
+  position: absolute;
+}
+
+#credits p {
+  margin: 0;
+  text-shadow: .1em .1em 0 #191313;
+  width: 34.5em;
 }
 
 .piece {
@@ -115,16 +205,33 @@ h1 {
 }
 
 .button.pause {
- background: #bcb71e url("icons.png") 0 -58px no-repeat; 
+  background: #bcb71e url("icons.png") 0 -58px no-repeat; 
+  position: absolute;
+  top: 10px;
+  left: -15px;
 }
 
 .button.settings {
-  background: #bcb71e url("icons.png") 0 -174px no-repeat;
+  background: #7996a7 url("icons.png") 0 -174px no-repeat;
   position: absolute;
   top: 10px;
   right: -10px;
 }
 
 .button.back {
-  background: #bcb71e url("icons.png") 0 -116px no-repeat;
+  background: #7996a7 url("icons.png") 0 -116px no-repeat;
+  position: absolute;
+  top: 10px;
+  right: -15px;
+}
+
+.button.reload {
+  background: #999 url("icons.png") 0 -224px no-repeat;
+  position: absolute;
+  top: 10px;
+  right: 58px;
+}
+
+.button.reload.active {
+  background: #999 url("icons.png") 0 -224px no-repeat;
 }
