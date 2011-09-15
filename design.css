@@ -67,7 +67,7 @@ h1 {
   margin: -1.8em auto 0 auto;
   padding: .75em;
   text-align: center;
-  text-shadow: .04em .07em 0 #191313;
+  text-shadow: .1em .1em 0 #000;
   -moz-transform: rotate(-1deg) skew(-5deg);
   -webkit-transform: rotate(-1deg) skew(-5deg);
   width: 8em;
