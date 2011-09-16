@@ -6,6 +6,11 @@ function Timer(selector){
     printTime: function(){
       jQuery(selector).html((this.minutes < 10 ? "0" + this.minutes : this.minutes ) + ':' + (this.seconds < 10 ? "0" + this.seconds : this.seconds));
     },
+    reset: function(){
+      this.seconds = 0;
+      this.minutes = 0;
+      this.printTime();
+    },
     increaseTime: function(){
       if(this.seconds < 59 ){
         this.seconds ++;
@@ -66,6 +71,7 @@ function Puzzle(n, image_src) {
     timer: new Timer('.time'),
     moves: 0,
     build: function(){
+      jQuery('#puzzle').html('');
       var div = jQuery('<div>');
       solution_image = jQuery('<img />').attr('src', image_src);
       div.append(solution_image);
@@ -111,6 +117,9 @@ function Puzzle(n, image_src) {
       this.timer.start();
       this.disable_movements = false;
     },
+    resetMovements: function(){
+      jQuery('.moves').html("0 moves");
+    },
     move: function(from,to){
       if(this.disable_movements)
         return;
@@ -146,30 +155,65 @@ function Puzzle(n, image_src) {
   }
 }
 
-jQuery(document).ready(function($) {
-  var client_id = 'f0d3cc511b8a4f31868cab5c7f7b8f0d';
-  var puzzle;
-  $('.play').attr('disabled', true);
+function loadImageFromInstagram(client_id, puzzle){
   $.ajax({
     url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
     dataType: 'jsonp',
     success: function(data){
       puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
       puzzle.build();
-      $('.play').attr('disabled', false);
+      jQuery('.play').attr('disabled', false);
     }
   });
-  $('.play').live('click',function(){
+}
+
+function setLoadingMessage(){
+  jQuery('#puzzle').html('Loading image from Instagram...');
+}
+
+jQuery(document).ready(function($) {
+  var client_id = 'f0d3cc511b8a4f31868cab5c7f7b8f0d';
+  var puzzle;
+  jQuery('.play').attr('disabled', true);
+  setLoadingMessage();
+  $.ajax({
+    url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
+    dataType: 'jsonp',
+    success: function(data){
+      puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
+      puzzle.build();
+      jQuery('.play').attr('disabled', false);
+    }
+  });
+
+  jQuery('.play').live('click',function(){
     if (puzzle.started)
       puzzle.continue_playing();
     else
       puzzle.start();
-    $(this).removeClass('play').addClass('pause').html('Pause');
+    jQuery(this).removeClass('play').addClass('pause').html('Pause');
     return false;
   });
-  $('.pause').live('click',function(){
+
+  jQuery('.pause').live('click',function(){
     puzzle.pause();
-    $(this).removeClass('pause').addClass('play').html('Play');
+    jQuery(this).removeClass('pause').addClass('play').html('Play');
     return false;
   });
+
+  jQuery('.reload').live('click',function(){
+    puzzle.pause();
+    puzzle.timer.reset();
+    puzzle.resetMovements();
+    setLoadingMessage();
+    $.ajax({
+      url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
+      dataType: 'jsonp',
+      success: function(data){
+        puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
+        puzzle.build();
+        jQuery('.play').attr('disabled', false);
+      }
+    });
+  })
 });
