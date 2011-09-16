@@ -59,14 +59,19 @@ function Puzzle(n, image_src) {
     positions: random_positions,
     blank_position: blank_position,
     images: images,
+    solution_image: null,
     n: n,
     timer: new Timer('.time'),
     moves: 0,
     build: function(){
       var div = jQuery('<div>');
-      var image = jQuery('<img />').attr('src', image_src);
+      solution_image = jQuery('<img />').attr('src', image_src);
+      div.append(solution_image);
+      jQuery('#puzzle').append(div);
+    },
+    start: function(){
       var puzzle = this;
-      image.fadeIn(2500, function(){
+      solution_image.fadeOut(400, function(){
         jQuery('#puzzle').html('');
         for(var i = 0; i < n; i++) {
           for(var j = 0; j < n; j++) {
@@ -82,8 +87,6 @@ function Puzzle(n, image_src) {
         }
         puzzle.timer.start();
       });
-      div.append(image);
-      jQuery('#puzzle').append(div);
     },
     solved: function(){
       for(var i = 0; i < n*n; i++) {
@@ -128,12 +131,17 @@ function Puzzle(n, image_src) {
 
 jQuery(document).ready(function($) {
   var client_id = 'f0d3cc511b8a4f31868cab5c7f7b8f0d';
+  var puzzle;
+  $('.play').attr('disabled', true);
   $.ajax({
     url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
     dataType: 'jsonp',
     success: function(data){
-      var puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
+      puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
       puzzle.build();
     }
+  });
+  $('.play').click(function(){
+    puzzle.start();
   });
 });
