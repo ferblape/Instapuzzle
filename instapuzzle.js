@@ -15,7 +15,7 @@ function Timer(selector){
       if(this.seconds < 59 ){
         this.seconds ++;
       } else {
-        this.seconds = 0
+        this.seconds = 0;
         this.minutes ++;
       }
       this.printTime();
@@ -147,42 +147,35 @@ function Puzzle(n, image_src) {
       jQuery('.moves').html((this.moves == 1) ? "1 move" : this.moves + " moves");
 
       if (this.solved()){
-        alert("Solved!!");
-        jQuery('.piece:eq('+this.blank_position+')').html(this.images[this.blank_position]);
+        jQuery('.play').attr('disabled', true);        jQuery('.piece:eq('+this.blank_position+')').html(this.images[this.blank_position]);
         this.timer.stop();
       }
     }
   }
 }
 
-function loadImageFromInstagram(client_id, puzzle){
-  $.ajax({
-    url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
-    dataType: 'jsonp',
-    success: function(data){
-      puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
-      puzzle.build();
-      jQuery('.play').attr('disabled', false);
-    }
-  });
-}
-
 function setLoadingMessage(){
   jQuery('#puzzle').html('Loading image from Instagram...');
 }
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function() {
   var client_id = 'f0d3cc511b8a4f31868cab5c7f7b8f0d';
   var puzzle;
+
+  jQuery('#level').hide();
+  jQuery('.settings_controls').hide();
+
   jQuery('.play').attr('disabled', true);
   setLoadingMessage();
-  $.ajax({
+
+  jQuery.ajax({
     url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
     dataType: 'jsonp',
     success: function(data){
       puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
       puzzle.build();
       jQuery('.play').attr('disabled', false);
+      console.log("1.5")
     }
   });
 
@@ -206,7 +199,7 @@ jQuery(document).ready(function($) {
     puzzle.timer.reset();
     puzzle.resetMovements();
     setLoadingMessage();
-    $.ajax({
+    jQuery.ajax({
       url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
       dataType: 'jsonp',
       success: function(data){
@@ -215,5 +208,24 @@ jQuery(document).ready(function($) {
         jQuery('.play').attr('disabled', false);
       }
     });
-  })
+    return false;
+  });
+
+  jQuery('.settings').live('click', function(){
+    jQuery('.pause').trigger('click');
+    jQuery('#puzzle').hide();
+    jQuery('.settings_controls').show();
+    jQuery('.play_controls').hide();
+    jQuery('#level').show();
+    return false;
+  });
+
+  jQuery('.back').live('click', function(){
+    jQuery('#puzzle').show();
+    jQuery('.settings_controls').hide();
+    jQuery('.play_controls').show();
+    jQuery('#level').hide();
+    return false;
+  });
+
 });
