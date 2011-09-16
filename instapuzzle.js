@@ -60,6 +60,8 @@ function Puzzle(n, image_src) {
     blank_position: blank_position,
     images: images,
     solution_image: null,
+    started: false,
+    disable_movements: false,
     n: n,
     timer: new Timer('.time'),
     moves: 0,
@@ -68,6 +70,8 @@ function Puzzle(n, image_src) {
       solution_image = jQuery('<img />').attr('src', image_src);
       div.append(solution_image);
       jQuery('#puzzle').append(div);
+      this.started = false;
+      this.disable_movements = false;
     },
     start: function(){
       var puzzle = this;
@@ -81,11 +85,14 @@ function Puzzle(n, image_src) {
             }
             piece.click(function(){
               puzzle.move(jQuery(this).attr('id').match(/[0-9]+/)[0], puzzle.blank_position);
+              return false;
             });
             jQuery('#puzzle').append(piece);
           }
         }
         puzzle.timer.start();
+        puzzle.started = true;
+        puzzle.disable_movements = false;
       });
     },
     solved: function(){
@@ -96,7 +103,17 @@ function Puzzle(n, image_src) {
       }
       return true;
     },
+    pause: function(){
+      this.timer.stop();
+      this.disable_movements = true;
+    },
+    continue_playing: function(){
+      this.timer.start();
+      this.disable_movements = false;
+    },
     move: function(from,to){
+      if(this.disable_movements)
+        return;
       from = parseInt(from);
       to   = parseInt(to);
       if ((from != this.blank_position && to != this.blank_position) ||
@@ -139,9 +156,20 @@ jQuery(document).ready(function($) {
     success: function(data){
       puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
       puzzle.build();
+      $('.play').attr('disabled', false);
     }
   });
-  $('.play').click(function(){
-    puzzle.start();
+  $('.play').live('click',function(){
+    if (puzzle.started)
+      puzzle.continue_playing();
+    else
+      puzzle.start();
+    $(this).removeClass('play').addClass('pause').html('Pause');
+    return false;
+  });
+  $('.pause').live('click',function(){
+    puzzle.pause();
+    $(this).removeClass('pause').addClass('play').html('Play');
+    return false;
   });
 });
