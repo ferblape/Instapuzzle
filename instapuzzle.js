@@ -195,7 +195,7 @@ jQuery(document).ready(function() {
   });
 
   jQuery('.reload').live('click',function(){
-    puzzle.pause();
+    jQuery('.pause').trigger('click');
     puzzle.timer.reset();
     puzzle.resetMovements();
     setLoadingMessage();
