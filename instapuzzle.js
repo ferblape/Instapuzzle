@@ -181,15 +181,13 @@ jQuery(document).ready(function() {
   if (getCookie('instapuzzle')) {
     level = parseInt(getCookie('instapuzzle'));
   } else {
-    level = 3
+    level = 3;
     setCookie('instapuzzle', level);
   }
 
   jQuery('#level').hide();
   jQuery('#level a[data-level='+level+']').addClass('active');
-
   jQuery('.settings_controls').hide();
-
   jQuery('.play').attr('disabled', true);
   setLoadingMessage();
 
@@ -241,6 +239,29 @@ jQuery(document).ready(function() {
   });
 
   jQuery('.back').live('click', function(){
+    jQuery('#puzzle').show();
+    jQuery('.settings_controls').hide();
+    jQuery('.play_controls').show();
+    jQuery('#level').hide();
+    return false;
+  });
+
+  jQuery('.level').live('click', function(){
+    level = parseInt($(this).attr('data-level'));
+    setCookie('instapuzzle', level);
+    jQuery('#level a').removeClass('active');
+    jQuery('#level a[data-level='+level+']').addClass('active');
+
+    puzzle.timer.reset();
+    puzzle.resetMovements();
+    setLoadingMessage();
+    jQuery.ajax({
+      url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
+      dataType: 'jsonp',
+      success: function(data){
+        puzzle = new Puzzle(level, data['data'][0]['images']['standard_resolution']['url']);
+      }
+    });
     jQuery('#puzzle').show();
     jQuery('.settings_controls').hide();
     jQuery('.play_controls').show();
