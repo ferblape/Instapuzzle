@@ -21,7 +21,7 @@ html {
 body {
   background: #42525B;
   color: #fff;
-  padding: 2em 1em;
+  margin: 0;
 }
 
 img {
@@ -49,8 +49,8 @@ a:active {
   -webkit-box-shadow: 0.1em .1em 0 #000;
   box-shadow: .3em .3em 0 #353E3E;
   margin: 2.5em auto 0 auto;
-  padding: 2em;
-  width: 38.25em;
+  padding: 0;
+  width: 42.25em;
 }
 
 h1 {
@@ -118,6 +118,7 @@ h2 {
 
 #puzzle {
   height: 612px;
+  margin: 0 auto;
   position: relative;
   width: 612px;
 }
@@ -234,4 +235,15 @@ h2 {
 
 .button.reload.active {
   background: #999 url("icons.png") 0 -224px no-repeat;
+}
+
+@media only screen and (max-width:675px) {
+  #game {
+    background: #f03;
+    box-shadow: none;
+    width: 100%;
+  }
+  #controls {
+    display: none;
+  }
 }
