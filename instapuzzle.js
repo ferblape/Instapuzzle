@@ -1,3 +1,21 @@
+function setCookie(name, value) {
+  var date = new Date();
+  date.setTime(date.getTime()+(15*24*60*60*1000));
+  var expires = "; expires="+date.toGMTString();
+  document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function getCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
 function Timer(selector){
   return {
     seconds: 0,
@@ -59,6 +77,13 @@ function Puzzle(n, image_src) {
     }
   }
 
+  jQuery('#puzzle').html('');
+  var div = jQuery('<div>');
+  solution_image = jQuery('<img />').attr('src', image_src);
+  div.append(solution_image);
+  jQuery('#puzzle').append(div);
+  jQuery('.play').attr('disabled', false);
+
   return {
     solution: solution,
     positions: random_positions,
@@ -70,15 +95,6 @@ function Puzzle(n, image_src) {
     n: n,
     timer: new Timer('.time'),
     moves: 0,
-    build: function(){
-      jQuery('#puzzle').html('');
-      var div = jQuery('<div>');
-      solution_image = jQuery('<img />').attr('src', image_src);
-      div.append(solution_image);
-      jQuery('#puzzle').append(div);
-      this.started = false;
-      this.disable_movements = false;
-    },
     start: function(){
       var puzzle = this;
       solution_image.fadeOut(400, function(){
@@ -161,8 +177,17 @@ function setLoadingMessage(){
 jQuery(document).ready(function() {
   var client_id = 'f0d3cc511b8a4f31868cab5c7f7b8f0d';
   var puzzle;
+  var level;
+  if (getCookie('instapuzzle')) {
+    level = parseInt(getCookie('instapuzzle'));
+  } else {
+    level = 3
+    setCookie('instapuzzle', level);
+  }
 
   jQuery('#level').hide();
+  jQuery('#level a[data-level='+level+']').addClass('active');
+
   jQuery('.settings_controls').hide();
 
   jQuery('.play').attr('disabled', true);
@@ -172,10 +197,7 @@ jQuery(document).ready(function() {
     url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
     dataType: 'jsonp',
     success: function(data){
-      puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
-      puzzle.build();
-      jQuery('.play').attr('disabled', false);
-      console.log("1.5")
+      puzzle = new Puzzle(level, data['data'][0]['images']['standard_resolution']['url']);
     }
   });
 
@@ -203,9 +225,7 @@ jQuery(document).ready(function() {
       url: "https://api.instagram.com/v1/media/popular?client_id=" + client_id,
       dataType: 'jsonp',
       success: function(data){
-        puzzle = new Puzzle(3, data['data'][0]['images']['standard_resolution']['url']);
-        puzzle.build();
-        jQuery('.play').attr('disabled', false);
+        puzzle = new Puzzle(level, data['data'][0]['images']['standard_resolution']['url']);
       }
     });
     return false;
