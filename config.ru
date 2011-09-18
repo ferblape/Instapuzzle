@@ -1,4 +1,4 @@
-use Rack::Static, :urls => ["/design.css", "/instapuzzle.js", "/instapuzzle.min.js"]
+use Rack::Static, :urls => ["/design.css", "/instapuzzle.js", "/instapuzzle.min.js", "/icons.png"]
 
 run Proc.new { |env|
   if env["HTTP_HOST"] =~ /\Awww\./
