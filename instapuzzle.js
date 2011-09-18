@@ -10,8 +10,12 @@ function getCookie(name) {
   var ca = document.cookie.split(';');
   for(var i=0;i < ca.length;i++) {
     var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1,c.length);
+    }
+    if (c.indexOf(nameEQ) === 0) {
+      return c.substring(nameEQ.length,c.length);
+    }
   }
   return null;
 }
@@ -44,7 +48,7 @@ function Timer(selector){
     stop: function(){
       this.interval = clearInterval(this.interval);
     }
-  }
+  };
 }
 
 function Puzzle(n, image_src) {
@@ -66,7 +70,7 @@ function Puzzle(n, image_src) {
   var blank_position = random_positions[number_of_pieces - 1]; // the last element is always the blank hole
 
   var images = new Array();
-  for(var i = 0; i < n; i++) {
+  for(i = 0; i < n; i++) {
     for(var j = 0; j < n; j++) {
       var index = i*n+j;
       var node = jQuery('<img />').attr('src', image_src).attr('height', instagram_image_size).
@@ -138,18 +142,18 @@ function Puzzle(n, image_src) {
     },
     move: function(from,to){
       if(this.disable_movements)
-        return;
+        return false;
       from = parseInt(from);
       to   = parseInt(to);
       if ((from != this.blank_position && to != this.blank_position) ||
           (from == to) ||
-          (from < to && ((from+1)%this.n==0) && ((to+1)%this.n!=0)) ||
-          (from > to && ((to+1)%this.n==0) && ((from+1)%this.n!=0)))
-        return;
+          (from < to && ((from+1)%this.n===0) && ((to+1)%this.n!==0)) ||
+          (from > to && ((to+1)%this.n===0) && ((from+1)%this.n!==0)))
+        return false;
 
       var diff = (from - to < 0 ? to - from : from - to);
       if (diff != 1 && diff != n)
-        return;
+        return false;
 
       var swap = this.positions[from];
       this.positions[from] = this.positions[to];
@@ -166,8 +170,9 @@ function Puzzle(n, image_src) {
         jQuery('.play').attr('disabled', true);        jQuery('.piece:eq('+this.blank_position+')').html(this.images[this.blank_position]);
         this.timer.stop();
       }
+      return true;
     }
-  }
+  };
 }
 
 function setLoadingMessage(){
@@ -175,6 +180,7 @@ function setLoadingMessage(){
 }
 
 jQuery(document).ready(function() {
+  var default_image_size = 612;
   var client_id = 'f0d3cc511b8a4f31868cab5c7f7b8f0d';
   var puzzle;
   var level;
@@ -184,6 +190,9 @@ jQuery(document).ready(function() {
     level = 3;
     setCookie('instapuzzle', level);
   }
+
+  console.log($(window).height());
+  console.log($(window).width());
 
   jQuery('#level').hide();
   jQuery('#level a[data-level='+level+']').addClass('active');
@@ -200,10 +209,11 @@ jQuery(document).ready(function() {
   });
 
   jQuery('.play').live('click',function(){
-    if (puzzle.started)
+    if (puzzle.started) {
       puzzle.continue_playing();
-    else
+    } else {
       puzzle.start();
+    }
     jQuery(this).removeClass('play').addClass('pause').html('Pause');
     return false;
   });
