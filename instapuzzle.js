@@ -72,7 +72,6 @@ function Puzzle(n, image_src) {
   var images = new Array();
   for(i = 0; i < n; i++) {
     for(var j = 0; j < n; j++) {
-      var index = i*n+j;
       var node = jQuery('<img />').attr('src', image_src).attr('height', instagram_image_size).
           attr('width', instagram_image_size).
           css("position", "relative").css("top", -1*i*slice).
@@ -89,6 +88,7 @@ function Puzzle(n, image_src) {
   jQuery('.play').attr('disabled', false);
 
   return {
+    instagram_image_size: instagram_image_size,
     solution: solution,
     positions: random_positions,
     blank_position: blank_position,
@@ -99,6 +99,7 @@ function Puzzle(n, image_src) {
     n: n,
     timer: new Timer('.time'),
     moves: 0,
+    pieces: new Array(),
     start: function(){
       var puzzle = this;
       solution_image.fadeOut(400, function(){
@@ -113,6 +114,7 @@ function Puzzle(n, image_src) {
               puzzle.move(jQuery(this).attr('id').match(/[0-9]+/)[0], puzzle.blank_position);
               return false;
             });
+            puzzle.pieces.push(piece);
             jQuery('#puzzle').append(piece);
           }
         }
@@ -138,7 +140,7 @@ function Puzzle(n, image_src) {
       this.disable_movements = false;
     },
     resetMovements: function(){
-      jQuery('.moves').html("0 moves");
+      jQuery('.moves span').html("0 moves");
     },
     move: function(from,to){
       if(this.disable_movements)
@@ -164,7 +166,7 @@ function Puzzle(n, image_src) {
       jQuery('.piece:eq('+to+')').html(this.images[this.positions[to]]);
 
       this.moves ++;
-      jQuery('.moves').html((this.moves == 1) ? "1 move" : this.moves + " moves");
+      jQuery('.moves span').html((this.moves == 1) ? "1 move" : this.moves + " moves");
 
       if (this.solved()){
         jQuery('.play').attr('disabled', true);        jQuery('.piece:eq('+this.blank_position+')').html(this.images[this.blank_position]);
@@ -180,7 +182,7 @@ function setLoadingMessage(){
 }
 
 jQuery(document).ready(function() {
-  var default_image_size = 612;
+  var previous_width = $(window).width()
   var client_id = 'f0d3cc511b8a4f31868cab5c7f7b8f0d';
   var puzzle;
   var level;
@@ -190,9 +192,6 @@ jQuery(document).ready(function() {
     level = 3;
     setCookie('instapuzzle', level);
   }
-
-  console.log($(window).height());
-  console.log($(window).width());
 
   jQuery('#level').hide();
   jQuery('#level a[data-level='+level+']').addClass('active');
@@ -281,14 +280,32 @@ jQuery(document).ready(function() {
 
   $(window).resize(function() {
     var current_width = $(window).width();
-    if(current_width < 612){
+
+    if(current_width < puzzle.instagram_image_size){
       if((current_width >= 320) && (current_width <= 480)) {
-        $('#puzzle').css('width', current_width - 10).css('height', current_width - 10);
+        current_width = current_width - 20;
+        $('#puzzle').css('width', current_width).css('height', current_width );
       } else if(current_width > 480) {
-        $('#puzzle').css('width', current_width - 20).css('height', current_width - 20);
+        current_width = current_width - 40;
+        $('#puzzle').css('width', current_width).css('height', current_width);
       }
     } else {
-      $('#puzzle').css('width', 612).css('height', 612);
+      current_width = puzzle.instagram_image_size;
+      $('#puzzle').css('width', current_width).css('height', current_width);
+    }
+
+    if($('#puzzle div').length > 1 ) {
+      var slice = Math.ceil(current_width / puzzle.n);
+      for(var i = 0; i < puzzle.n; i++) {
+        for(var j = 0; j < puzzle.n; j++) {
+          if ((typeof puzzle.pieces[i*puzzle.n+j] !== "undefined") && (typeof puzzle.images[i*puzzle.n+j] !== "undefined")){
+            puzzle.pieces[i*puzzle.n+j].css("top", i*slice).css("left", j*slice).css("height", slice).css("width", slice);
+            puzzle.images[i*puzzle.n+j].attr('height', current_width).attr('width', current_width).css("top", -1*i*slice).css("left", -1*j*slice);
+          }
+        }
+      }
+    } else {
+      $('#puzzle div img').attr('height', current_width).attr('width', current_width);
     }
   });
 
