@@ -279,4 +279,17 @@ jQuery(document).ready(function() {
     return false;
   });
 
+  $(window).resize(function() {
+    var current_width = $(window).width();
+    if(current_width < 612){
+      if((current_width >= 320) && (current_width <= 480)) {
+        $('#puzzle').css('width', current_width - 10).css('height', current_width - 10);
+      } else if(current_width > 480) {
+        $('#puzzle').css('width', current_width - 20).css('height', current_width - 20);
+      }
+    } else {
+      $('#puzzle').css('width', 612).css('height', 612);
+    }
+  });
+
 });
