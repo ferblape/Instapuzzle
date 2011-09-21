@@ -1,4 +1,4 @@
-/* Delete before submit
+/* Delete before submit */
 
 @font-face {
     font-family: 'HVDComicSerifProRegular';
@@ -11,7 +11,7 @@
     font-style: normal;
 }
 
-End */
+/* End */
 
 html {
   background: #42525B;
@@ -21,7 +21,7 @@ html {
 body {
   background: #42525B;
   color: #fff;
-  margin: 0;
+  margin: 2em auto;
 }
 
 img {
@@ -48,8 +48,9 @@ a:active {
   -moz-box-shadow: 0.1em .1em 0 #000;
   -webkit-box-shadow: 0.1em .1em 0 #000;
   box-shadow: .3em .3em 0 #353E3E;
-  margin: 2.5em auto 0 auto;
-  padding: 0;
+  margin: 0 auto;
+  padding: 2em 0;
+  position: relative;
   width: 42.25em;
 }
 
@@ -63,14 +64,18 @@ h1 {
   box-shadow: .1em .1em 0 #000;
   color: #fff;
   display: block;
-  font-size: 3em;
-  margin: -1.8em auto 0 auto;
-  padding: .75em;
+  font-size: 2em;
+  margin: 0;
+  padding: 1em;
+  position: absolute;
+  left: -.25em;
   text-align: center;
   text-shadow: .1em .1em 0 #000;
-  -moz-transform: rotate(-1deg) skew(-5deg);
-  -webkit-transform: rotate(-1deg) skew(-5deg);
-  width: 8em;
+  -moz-transform: rotate(-1deg) skew(-2deg);
+  -webkit-transform: rotate(-1deg) skew(-2deg);
+  top: .75em;
+  width: 32%;
+  z-index: 1000;
 }
 
 #controls {
@@ -79,23 +84,26 @@ h1 {
   -moz-border-radius: .75em;
   border-radius: .75em;
   color: #fff;
+  left: 46%;
   line-height: 1em;
-  margin: 1.5em 0;
-  padding: 1em;
+  margin: 0 0 2em 0;
+  padding: 1.2em;
   position: relative;
   -moz-transform: skew(1deg);
   -webkit-transform: skew(2deg);
+  width: 45%;
 }
 
 h2,
 .time {
   display: inline-block;
-  font-size: 2em;
-  left: 1.25em;
+  font-size: 1.8em;
+  left: 1.4em;
   line-height: 1.5em;
   margin: 0;
   position: relative;
   text-shadow: .1em .15em 0 #000;
+  top: .1em;
 }
 
 h2 {
@@ -104,16 +112,17 @@ h2 {
 
 .moves {
   display: inline-block;
-  font-size: 2em;
-  left: 5em;
+  font-size: 1.8em;
+  left: 5.5em;
   line-height: 1.5em;
   position: absolute;
   text-shadow: .1em .15em 0 #000;
+  top: .75em;
 }
 
 .moves span {
   display: inline-block;
-  font-size: .75em;
+  font-size: .5em;
 }
 
 #puzzle {
@@ -238,12 +247,53 @@ h2 {
 }
 
 @media only screen and (max-width:675px) {
+  
+  body {
+    margin: 0;
+  }
+
   #game {
-    background: #f03;
+    border-radius: 0;
     box-shadow: none;
+    padding: 20px 0;
     width: 100%;
   }
+
+  h1 {
+    font-size: 1.8em;
+    left: 20px;
+    line-height: .85em;
+    padding: .75em;
+    top: .5em;
+    width: 20%;
+  }
+
+  h1 span {
+    display: block;
+  }
+
   #controls {
+    left: 38%;
+    width: 52%;
+  }
+
+}
+
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+
+  #game {
+    box-shadow: none;
+    padding: 20px 0 10px 0;
+    width: 100%;
+  }
+
+  h1 {
     display: none;
   }
+
+  #controls {
+    left: 6%;
+    width: 80%;
+  }
+
 }
