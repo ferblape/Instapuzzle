@@ -137,7 +137,7 @@ h2 {
   -webkit-border-radius: 1em;
   -moz-border-radius: 1em;
   border-radius: 1em;
-  min-height: 34.25em;
+  margin: 0 1.75em;
   padding: 2em;
   position: relative;
   text-align: center;
@@ -157,7 +157,7 @@ h2 {
   margin: 0 0 1em 0;
   padding: .75em;
   text-shadow: .04em .07em 0 #191313;
-  width: 15.5em;
+  width: 90%;
 }
 
 .level span {
@@ -173,14 +173,9 @@ h2 {
 }
 
 #credits {
-  bottom: 2em;
-  position: absolute;
-}
-
-#credits p {
-  margin: 0;
-  text-shadow: .1em .1em 0 #191313;
-  width: 34.5em;
+  margin: 0 0 1em 0;
+  text-shadow: .15em .15em 0 #191313;
+  width: 90%;
 }
 
 .piece {
@@ -207,6 +202,12 @@ h2 {
   width: 58px;
 }
 
+.button:active {
+  -moz-box-shadow: 2px 2px 1px #000;
+  -webkit-box-shadow: 2px 2px 1px #000;
+  box-shadow: 1px 3px 1px #000;
+}
+
 .button.play {
   background: #bcb71e url("icons.png") 1px 0 no-repeat;
   position: absolute;
@@ -221,6 +222,12 @@ h2 {
   left: -15px;
 }
 
+.button.play:active,
+.button.pause:active {
+  top: 12px;
+  left: -13px;
+}
+
 .button.settings {
   background: #7996a7 url("icons.png") 0 -174px no-repeat;
   position: absolute;
@@ -228,11 +235,21 @@ h2 {
   right: -10px;
 }
 
+.button.settings:active {
+  top: 12px;
+  right: -12px;
+}
+
 .button.back {
   background: #7996a7 url("icons.png") 0 -116px no-repeat;
   position: absolute;
-  top: 10px;
-  right: -15px;
+  top: .6em;
+  right: -.25em;
+}
+
+.button.back:active {
+  top: .8em;
+  right: -.45em;
 }
 
 .button.reload {
@@ -242,8 +259,9 @@ h2 {
   right: 58px;
 }
 
-.button.reload.active {
-  background: #999 url("icons.png") 0 -224px no-repeat;
+.button.reload:active {
+  top: 12px;
+  right: 56px;
 }
 
 @media only screen and (max-width:675px) {
@@ -277,6 +295,10 @@ h2 {
     width: 52%;
   }
 
+  .level {
+    width: 88%;
+  }
+
 }
 
 @media only screen and (min-width: 320px) and (max-width: 480px) {
@@ -296,4 +318,7 @@ h2 {
     width: 80%;
   }
 
+  .level {
+    width: 84%;
+  }
 }
